@@ -8,6 +8,7 @@ typedef struct CourseInfo
   char description[100];
   float grade; // both percentages
   float completed;
+  float units;
 } course;
 
 typedef struct CourseList
@@ -16,7 +17,19 @@ typedef struct CourseList
   int count;
 } courses;
 
-char *gradeToLetter(double grade)
+void deleteEndl(char *str)
+{
+  int maxStr = 100;
+  for (int i = 0; i < maxStr; i++)
+  {
+    if (str[i] == '\0')
+      break;
+    if (str[i] == '\n')
+      str[i] = '\0';
+  }
+}
+
+char *gradeToLetter(float grade)
 {
   FILE *fp = fopen("gpatable.txt", "r");
   char numStr[10];
@@ -35,20 +48,14 @@ char *gradeToLetter(double grade)
     else
     {
       fgets(letterGrade, 10, fp);
-      for (int i = 0; i < 10; i++)
-      {
-        if (letterGrade[i] == '\n')
-        {
-          letterGrade[i] = '\0';
-        }
-      }
+      deleteEndl(letterGrade);
       fclose(fp);
       return letterGrade;
     }
   }
 }
 
-double highestGradePossible(double grade, double completed)
+float highestGradePossible(float grade, float completed)
 {
   return (1 - completed) + grade * completed;
 }
