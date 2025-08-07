@@ -106,12 +106,15 @@ void parseCourseInfo(courses *info)
   char str_buf[50];
   int i = 0;
 
+  course temp = {0};
+
   while (fgets(buffer, 100, fp) != NULL)
   {
-    strcpy(info[i].info->course_code, extractValue(buffer, 0));
-    strcpy(info[i].info->description, extractValue(buffer, 1));
-    info[i].info->grade = atof(extractValue(buffer, 2));
-    info[i].info->completed = atof(extractValue(buffer, 3));
+    strcpy(temp.course_code, extractValue(buffer, 0));
+    strcpy(temp.description, extractValue(buffer, 1));
+    temp.grade = atof(extractValue(buffer, 2));
+    temp.completed = atof(extractValue(buffer, 3));
+    info->info[i] = temp;
     // printf("%s\n", info[i].info->course_code);
     i++;
   }
