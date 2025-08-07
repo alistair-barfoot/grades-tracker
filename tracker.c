@@ -29,6 +29,32 @@ void deleteEndl(char *str)
   }
 }
 
+char *extractValue(char *line, int column)
+{
+  int commas_seen = 0;
+  int i = 0;
+
+  // Move index forward until the desired number of commas have been seen
+  while (line[i] != '\0' && commas_seen < column)
+  {
+    if (line[i] == ',')
+      commas_seen++;
+    i++;
+  }
+
+  // Extract characters starting at the column of interest until the next comma/newline
+  static char value_str[50]; // Buffer to hold the numeric string
+  int j = 0;
+  while (line[i] != ',' && line[i] != '\n' && line[i] != '\0' && j < 15)
+  {
+    value_str[j++] = line[i++];
+  }
+  value_str[j] = '\0';
+
+  // Convert string to a floating point number
+  return value_str;
+}
+
 char *gradeToLetter(float grade)
 {
   FILE *fp = fopen("gpatable.txt", "r");
@@ -76,11 +102,14 @@ void parseCourseInfo(courses *info)
 {
   FILE *fp = fopen("storage.csv", "r");
   char buffer[100];
-  fgets(buffer, 100, fp);
+  fgets(buffer, 100, fp); // skip the first line
+  char str_buf[50];
 
   while (fgets(buffer, 100, fp) != NULL)
   {
-    }
+    strcpy(str_buf, extractValue(buffer, 0));
+    printf("%s\n", str_buf);
+  }
 }
 
 void printToFile(courses info)
