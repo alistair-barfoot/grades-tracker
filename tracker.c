@@ -72,6 +72,33 @@ void printCourseInfo(course info, int i)
   printf("(%s)\n", gradeToLetter(highestPossible));
 }
 
+void parseCourseInfo(courses *info)
+{
+  FILE *fp = fopen("storage.csv", "r");
+  char buffer[100];
+  fgets(buffer, 100, fp);
+
+  while (fgets(buffer, 100, fp) != NULL)
+  {
+    }
+}
+
+void printToFile(courses info)
+{
+  FILE *fp = fopen("storage.csv", "w");
+  fprintf(fp, "Course Code,Description,Grade,Completed\n");
+
+  for (int i = 0; i < info.count; i++)
+  {
+    fprintf(fp, "%s,", info.info[i].course_code);
+    fprintf(fp, "%s,", info.info[i].description);
+    fprintf(fp, "%.5f,", info.info[i].grade);
+    fprintf(fp, "%.5f\n", info.info[i].completed);
+  }
+
+  fclose(fp);
+}
+
 int main(int argc, char *argv[])
 {
   course apsc100 = {0};
@@ -91,8 +118,11 @@ int main(int argc, char *argv[])
   CourseList.info[1] = mren203;
   CourseList.count = 2;
 
+  parseCourseInfo(&CourseList);
+
   for (int i = 0; i < CourseList.count; i++)
   {
     printCourseInfo(CourseList.info[i], i);
   }
+  printToFile(CourseList);
 }
