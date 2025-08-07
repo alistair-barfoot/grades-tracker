@@ -45,7 +45,7 @@ char *extractValue(char *line, int column)
   // Extract characters starting at the column of interest until the next comma/newline
   static char value_str[50]; // Buffer to hold the numeric string
   int j = 0;
-  while (line[i] != ',' && line[i] != '\n' && line[i] != '\0' && j < 15)
+  while (line[i] != ',' && line[i] != '\n' && line[i] != '\0' && j < 49)
   {
     value_str[j++] = line[i++];
   }
@@ -104,12 +104,19 @@ void parseCourseInfo(courses *info)
   char buffer[100];
   fgets(buffer, 100, fp); // skip the first line
   char str_buf[50];
+  int i = 0;
 
   while (fgets(buffer, 100, fp) != NULL)
   {
-    strcpy(str_buf, extractValue(buffer, 0));
-    printf("%s\n", str_buf);
+    strcpy(info[i].info->course_code, extractValue(buffer, 0));
+    strcpy(info[i].info->description, extractValue(buffer, 1));
+    info[i].info->grade = atof(extractValue(buffer, 2));
+    info[i].info->completed = atof(extractValue(buffer, 3));
+    // printf("%s\n", info[i].info->course_code);
+    i++;
   }
+
+  info->count = i;
 }
 
 void printToFile(courses info)
@@ -130,22 +137,22 @@ void printToFile(courses info)
 
 int main(int argc, char *argv[])
 {
-  course apsc100 = {0};
-  strcpy(apsc100.course_code, "APSC 100");
-  strcpy(apsc100.description, "Intro to Engineering");
-  apsc100.grade = 0.8192;
-  apsc100.completed = 0.41;
+  // course apsc100 = {0};
+  // strcpy(apsc100.course_code, "APSC 100");
+  // strcpy(apsc100.description, "Intro to Engineering");
+  // apsc100.grade = 0.8192;
+  // apsc100.completed = 0.41;
 
-  course mren203 = {0};
-  strcpy(mren203.course_code, "MREN 203");
-  strcpy(mren203.description, "Intro to Mechatronics");
-  mren203.grade = 0.5552;
-  mren203.completed = 0.12;
+  // course mren203 = {0};
+  // strcpy(mren203.course_code, "MREN 203");
+  // strcpy(mren203.description, "Intro to Mechatronics");
+  // mren203.grade = 0.5552;
+  // mren203.completed = 0.12;
 
   courses CourseList = {0};
-  CourseList.info[0] = apsc100;
-  CourseList.info[1] = mren203;
-  CourseList.count = 2;
+  // CourseList.info[0] = apsc100;
+  // CourseList.info[1] = mren203;
+  // CourseList.count = 2;
 
   parseCourseInfo(&CourseList);
 
