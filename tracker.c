@@ -141,6 +141,24 @@ void printOptions(course info)
   printf("Type the number for the value you would like to modify...\n");
 }
 
+void addAssessment(course *info)
+{
+  float grade;
+  printf("What grade did you get?");
+  scanf("%f", &grade);
+  if (grade >= 1)
+    grade /= 100;
+
+  printf("How much was this assessment worth?");
+  float worth;
+  scanf("%f", &worth);
+  if (worth >= 1)
+    worth /= 100;
+
+  info->completed += worth;
+  info->grade += worth * grade;
+}
+
 void printToFile(courses info)
 {
   FILE *fp = fopen("storage.csv", "w");
@@ -192,12 +210,18 @@ int main(int argc, char *argv[])
   switch (getc(stdin))
   {
   case 'a':
-    printf("Tttt\n");
+    addAssessment(&CourseList.info[index]);
     break;
   case 'e':
     printOptions(CourseList.info[index]);
     break;
   default:
     printf("Try again\n");
+  }
+  getc(stdin);
+  printToFile(CourseList);
+  for (int i = 0; i < CourseList.count; i++)
+  {
+    printCourseInfo(CourseList.info[i], i);
   }
 }
