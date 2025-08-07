@@ -155,8 +155,14 @@ void addAssessment(course *info)
   if (worth >= 1)
     worth /= 100;
 
+  float p1, p2, c1, c2;
+  p1 = grade;
+  p2 = info->grade;
+  c1 = worth;
+  c2 = info->completed;
+
   info->completed += worth;
-  info->grade += worth * grade;
+  info->grade = (p1 * c1 + p2 * c2) / (c1 + c2);
 }
 
 void printToFile(courses info)
@@ -202,26 +208,29 @@ int main(int argc, char *argv[])
   }
   printToFile(CourseList);
 
-  printf("Type the number for the course you would like to modify...\n");
-  int index = getc(stdin) - '0' - 1;
-  getc(stdin);
+  while (1)
+  {
+    printf("Type the number for the course you would like to modify...\n");
+    int index = getc(stdin) - '0' - 1;
+    getc(stdin);
 
-  printf("Would you like to add a grade (a) or edit (e)?\n");
-  switch (getc(stdin))
-  {
-  case 'a':
-    addAssessment(&CourseList.info[index]);
-    break;
-  case 'e':
-    printOptions(CourseList.info[index]);
-    break;
-  default:
-    printf("Try again\n");
-  }
-  getc(stdin);
-  printToFile(CourseList);
-  for (int i = 0; i < CourseList.count; i++)
-  {
-    printCourseInfo(CourseList.info[i], i);
+    printf("Would you like to add a grade (a) or edit (e)?\n");
+    switch (getc(stdin))
+    {
+    case 'a':
+      addAssessment(&CourseList.info[index]);
+      break;
+    case 'e':
+      printOptions(CourseList.info[index]);
+      break;
+    default:
+      printf("Try again\n");
+    }
+    getc(stdin);
+    printToFile(CourseList);
+    for (int i = 0; i < CourseList.count; i++)
+    {
+      printCourseInfo(CourseList.info[i], i);
+    }
   }
 }
