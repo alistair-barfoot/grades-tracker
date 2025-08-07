@@ -79,6 +79,7 @@ char *gradeToLetter(float grade)
       return letterGrade;
     }
   }
+  fclose(fp);
 }
 
 float highestGradePossible(float grade, float completed)
@@ -120,12 +121,30 @@ void parseCourseInfo(courses *info)
   }
 
   info->count = i;
+  fclose(fp);
+}
+
+void printOptions(course info)
+{
+  FILE *fp = fopen("storage.csv", "r");
+  char line[100];
+  fgets(line, 100, fp);
+
+  char title[20];
+
+  for (int i = 0; i < 5; i++)
+  {
+    strcpy(title, extractValue(line, i));
+    printf("%d:\t%s\n", i + 1, title);
+  }
+
+  printf("Type the number for the value you would like to modify...\n");
 }
 
 void printToFile(courses info)
 {
   FILE *fp = fopen("storage.csv", "w");
-  fprintf(fp, "Course Code,Description,Grade,Completed\n");
+  fprintf(fp, "Course Code,Description,Grade,Completed,Units\n");
 
   for (int i = 0; i < info.count; i++)
   {
@@ -164,4 +183,21 @@ int main(int argc, char *argv[])
     printCourseInfo(CourseList.info[i], i);
   }
   printToFile(CourseList);
+
+  printf("Type the number for the course you would like to modify...\n");
+  int index = getc(stdin) - '0' - 1;
+  getc(stdin);
+
+  printf("Would you like to add a grade (a) or edit (e)?\n");
+  switch (getc(stdin))
+  {
+  case 'a':
+    printf("Tttt\n");
+    break;
+  case 'e':
+    printOptions(CourseList.info[index]);
+    break;
+  default:
+    printf("Try again\n");
+  }
 }
